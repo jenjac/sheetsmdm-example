@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Query MDM for the script to run
+udid=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformUUID/{print $(NF-1)}')
+
+##################################################################
+# Enter your own Web App URL in place of "YOUR_WEBAPP_URL" below
+##################################################################
+script=$(curl -s -L "YOUR_WEBAPP_URL?action=RunTerminalCommand&udid=$udid")
+
+# Don't run anything if nothing is requested
+if [ "$script" == "nothing requested" ]; then
+    exit 0
+fi
+
+eval "$script"

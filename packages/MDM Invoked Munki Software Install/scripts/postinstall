@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Query MDM for the Software title to run
+udid=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformUUID/{print $(NF-1)}')
+
+##################################################################
+# Enter your own Web App URL in place of "YOUR_WEBAPP_URL" below
+##################################################################
+pkgs=$(curl -s -L "YOUR_WEBAPP_URL?action=GetMDMInvoked&udid=$udid")
+
+# Don't run anything if nothing is requested
+if [ "$pkgs" == "nothing requested" ]; then
+    exit 0
+fi
+
+# Self-serve manifest location
+manifestLocation='/Library/Managed Installs/manifests/SelfServeManifest'
+
+# PlistBuddy full path
+plistBuddy='/usr/libexec/PlistBuddy'
+
+# Check to see if the file exists. If it doesn't, you may have to create it with an empty array; otherwise,
+if [ ! -f "$manifestLocation" ]; then
+    "$plistBuddy" -c "Add :managed_installs array" "$manifestLocation"
+fi
+
+while read -r package; do
+    # Check it's not already in there
+    alreadyExists=$("$plistBuddy" -c "Print: managed_installs" "$manifestLocation" | /usr/bin/grep "$package")
+
+    # Single quote expansion of variables gets messy in bash, so we're going to pre-double-quote the single-quotes on the package name
+    alteredPackageName="'""$package""'"
+
+    if [ -z "$alreadyExists" ]; then
+        "$plistBuddy" -c "Add :managed_installs: string $alteredPackageName" "$manifestLocation"
+    fi
+done <<< "$pkgs"
+
+# Run the item from the on-demand manifest
+manifest="mdm-invoked"
+
+( # Start writing
+    echo '#!/bin/bash'
+    echo ''
+    # Comment out the following line if you do not want the progress to show at the login screen
+    echo 'touch /Users/Shared/.com.googlecode.munki.checkandinstallatstartup'
+    echo 'output=$(/usr/local/munki/managedsoftwareupdate --checkonly --munkipkgsonly --id='$manifest' 2>&1 | grep -o "Another instance")'
+    echo 'if [ "$output" == "Another instance" ]; then'
+    echo '    exit 1'
+    echo 'fi'
+    echo ''
+    echo '/usr/local/munki/managedsoftwareupdate --installonly --munkipkgsonly --id='$manifest
+    echo '/usr/local/munki/managedsoftwareupdate --checkonly --munkipkgsonly'
+    echo 'rm /tmp/'$manifest'.sh'
+    echo 'rm /tmp/'$manifest'.plist'
+    echo ''
+) > /tmp/$manifest.sh
+
+# Run all Managed Installs when available
+defaults write /tmp/$manifest.plist Label $manifest
+defaults write /tmp/$manifest.plist ProgramArguments -array "/bin/bash" "-c" "sh /tmp/$manifest.sh && launchctl remove $manifest"
+defaults write /tmp/$manifest.plist RunAtLoad -bool true
+defaults write /tmp/$manifest.plist KeepAlive -bool true
+defaults write /tmp/$manifest.plist ThrottleInterval -int 10
+
+chown root:wheel /tmp/$manifest.plist
+chmod 644 /tmp/$manifest.plist
+
+launchctl load /tmp/$manifest.plist
