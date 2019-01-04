@@ -1,0 +1,6 @@
+# Skip all DMG and PKG files
+*.dmg
+*.pkg
+
+.DS_Store
+._.DS_Store
