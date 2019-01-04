@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      label {
+        font-weight: bold;
+      }
+    </style>
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+    <script>
+      function processForm() {
+        var form = document.getElementById('munki');
+        form.udid.disabled = false;
+        google.script.run
+          .withSuccessHandler(closeWindow)
+          .startMDMInvokedInstall(form);
+      }
+      
+      function closeWindow() {
+        google.script.host.close();
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Invoke Munki Install</h1>
+    <p>Please enter a package name from the mdm-invoked manifest to start the install.</p>
+    <form id="munki">
+      <table width="100%">
+        <tr>
+          <td><label>Install to Run:</label></td><td><input type="text" name="pkg" size="40" value="" /></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <i>Please confirm the machine details below:</i>
+          </td>
+        </tr>
+        <tr>
+          <td><label>Selected Device Tag:</label></td><td><input type="text" name="tag" size="40" disabled=true style="color: grey;" value="<?= tag ?>" /></td>
+        </tr>
+        <tr>
+          <td><label>Selected Device Serial:</label></td><td><input type="text" name="serial" size="40" disabled=true style="color: grey;" value="<?= serial ?>" /></td>
+        </tr>
+        <tr>
+          <td><label>Selected Device UDID:</label></td><td><input type="text" name="udid" size="40" disabled=true style="color: grey;" value="<?= udid ?>" /></td>
+        </tr>
+      </table>
+      <input type="button" id="confirm" value="Confirm" onclick="processForm()" /> <input type="button" id="cancel" value="Cancel" onclick="google.script.host.close()" />
+      <p id="result"></p>
+    </form>
+  </body>
+</html>
