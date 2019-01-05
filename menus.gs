@@ -2,7 +2,7 @@ function onOpen(e) {
   var ss = SpreadsheetApp.getActive();
   var name = "Device Responses";
   var sh = ss.getSheetByName(name);
-  if ( !sh ) {
+  if ( sh ) {
     createMenu();
   } else {
     createSetupMenu();
