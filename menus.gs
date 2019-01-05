@@ -46,6 +46,6 @@ function setupAndAuthorize() {
   getDevicesSheet();
   createDeviceResponsesSheet();
   var ui = SpreadsheetApp.getUi();
-  ui.alert('Authorization Finished', 'Please continue the "Configuring SheetsMDM section of the Wiki to finish setting up your web app.', ui.ButtonSet.OK);
+  ui.alert('Authorization Finished', 'Please continue the "Configuring SheetsMDM" section of the Wiki to finish setting up your web app.', ui.ButtonSet.OK);
   createMenu();
 }
