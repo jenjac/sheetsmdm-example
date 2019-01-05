@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>jenjac</string>
+		<key>creation_date</key>
+		<date>2018-11-16T16:02:32Z</date>
+		<key>munki_version</key>
+		<string>3.4.1.3557</string>
+		<key>os_version</key>
+		<string>10.14</string>
+	</dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>production</string>
+	</array>
+	<key>category</key>
+	<string>Management Tools</string>
+	<key>description</key>
+	<string>Send a command to MDM to install all VPP applications that are assigned to this device.</string>
+	<key>developer</key>
+	<string>Bethel University</string>
+	<key>display_name</key>
+	<string>VPP Install All Assigned</string>
+	<key>icon_name</key>
+	<string>Bethel.png</string>
+	<key>installcheck_script</key>
+	<string>#!/bin/bash
+
+# Make the script always available to run
+# Works with the Preinstall script that removes this package item from
+#   the SelfServeManifest, so it doesn't run again automatically
+#   when the item scripts are complete.
+
+exit 0</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>VPP_Install_All_Assigned</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+
+appID="all_assigned"
+
+
+
+
+##################################################################
+# DO NOT MODIFY BELOW THIS LINE
+##################################################################
+
+udid=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformUUID/{print $(NF-1)}')
+serial=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformSerialNumber/{print $(NF-1)}')
+
+curl -s -L "https://script.google.com/macros/s/AKfycbwGEIlXct-v74aY6pfvuZ9zYbQLuwW-TpLs2PqWs9RDcZNpCDg/exec?action=InstallApplication&amp;vpp=$appID&amp;udid=$udid&amp;serial=$serial"</string>
+	<key>preinstall_alert</key>
+	<dict>
+		<key>alert_detail</key>
+		<string>VPP applications are installed by your MDM server.  Check your /Applications folder after running this item to verify that the applications have been installed.</string>
+		<key>alert_title</key>
+		<string>VPP Application Install</string>
+	</dict>
+	<key>preinstall_script</key>
+	<string>#!/bin/bash
+
+# Remove from SelfServeManifest so it won't run again when complete
+
+
+# Change this name, to match the name of the package item in Munki
+PACKAGE_NAME="VPP_Install_All_Assigned"
+
+
+
+
+##################################################################
+# DO NOT MODIFY BELOW THIS LINE
+##################################################################
+
+sed -i "" "/&lt;string&gt;$PACKAGE_NAME&lt;\/string&gt;/d" \
+    "/Library/Managed Installs/manifests/SelfServeManifest"
+</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>version</key>
+	<string>1.0</string>
+</dict>
+</plist>

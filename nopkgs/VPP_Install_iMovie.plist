@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>jenjac</string>
+		<key>creation_date</key>
+		<date>2018-11-16T16:02:32Z</date>
+		<key>munki_version</key>
+		<string>3.4.1.3557</string>
+		<key>os_version</key>
+		<string>10.14</string>
+	</dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>production</string>
+	</array>
+	<key>category</key>
+	<string>Video</string>
+	<key>description</key>
+	<string>With a streamlined design and intuitive editing features, iMovie lets you enjoy your videos and tell stories like never before. Browse your video library, share favorite moments, and create beautiful movies that you can edit at resolutions up to 4K. You can even start editing movies on an iPhone or iPad, and finish them on a Mac.</string>
+	<key>developer</key>
+	<string>Apple</string>
+	<key>display_name</key>
+	<string>iMovie</string>
+	<key>icon_name</key>
+	<string>iMovie_macOS.png</string>
+	<key>installcheck_script</key>
+	<string>#!/bin/bash
+
+if [ -d /Applications/iMovie.app ]; then
+	exit 1
+fi</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>VPP_Install_iMovie</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+
+appID="408981434"
+
+
+
+
+##################################################################
+# DO NOT MODIFY BELOW THIS LINE
+##################################################################
+
+udid=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformUUID/{print $(NF-1)}')
+
+curl -s -L "https://script.google.com/macros/s/AKfycbwGEIlXct-v74aY6pfvuZ9zYbQLuwW-TpLs2PqWs9RDcZNpCDg/exec?action=InstallApplication&amp;vpp=$appID&amp;udid=$udid"</string>
+	<key>preinstall_alert</key>
+	<dict>
+		<key>alert_detail</key>
+		<string>This application is installed by your MDM server.  Check your /Applications folder after running this item to verify that the application has been installed.</string>
+		<key>alert_title</key>
+		<string>VPP Application Install</string>
+	</dict>
+	<key>preinstall_script</key>
+	<string>#!/bin/bash
+
+# Remove from SelfServeManifest so it won't run again when complete
+
+
+# Change this name, to match the name of the package item in Munki
+PACKAGE_NAME="VPP_Install_iMovie"
+
+
+
+
+##################################################################
+# DO NOT MODIFY BELOW THIS LINE
+##################################################################
+
+sed -i "" "/&lt;string&gt;$PACKAGE_NAME&lt;\/string&gt;/d" \
+    "/Library/Managed Installs/manifests/SelfServeManifest"
+</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>unattended_uninstall</key>
+	<true/>
+	<key>uninstall_method</key>
+	<string>uninstall_script</string>
+	<key>uninstall_script</key>
+	<string>#!/bin/bash
+
+rm -R -f /Applications/iMovie.app</string>
+	<key>uninstallable</key>
+	<true/>
+	<key>version</key>
+	<string>1.0</string>
+</dict>
+</plist>
