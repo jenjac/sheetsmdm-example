@@ -39,13 +39,13 @@ function createSetupMenu() {
   ui.createMenu('SheetsMDM')
   .addItem('Setup...', 'setupAndAuthorize')
   .addToUi();
-  ui.alert('GusDay SheetsMDM Example Setup', 'Follow the instructions on the "Setup Instructions" sheet to set up your SheetsMDM instance.', ui.ButtonSet.OK);
+  ui.alert('GusDay SheetsMDM Example Setup', 'Use the SheetsMDM menu to set up your SheetsMDM instance.', ui.ButtonSet.OK);
 }
 
 function setupAndAuthorize() {
   getDevicesSheet();
   createDeviceResponsesSheet();
   var ui = SpreadsheetApp.getUi();
-  ui.alert('Authorization Finished', 'Please continue with step 6 of the Setup Instructions.', ui.ButtonSet.OK);
+  ui.alert('Authorization Finished', 'Please continue the "Configuring SheetsMDM section of the Wiki to finish setting up your web app.', ui.ButtonSet.OK);
   createMenu();
 }
