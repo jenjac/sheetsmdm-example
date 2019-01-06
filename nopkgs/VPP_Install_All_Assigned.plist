@@ -49,17 +49,13 @@ exit 0</string>
 
 appID="all_assigned"
 
-
-
-
-##################################################################
-# DO NOT MODIFY BELOW THIS LINE
-##################################################################
-
 udid=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformUUID/{print $(NF-1)}')
 serial=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformSerialNumber/{print $(NF-1)}')
 
-curl -s -L "https://script.google.com/macros/s/AKfycbwGEIlXct-v74aY6pfvuZ9zYbQLuwW-TpLs2PqWs9RDcZNpCDg/exec?action=InstallApplication&amp;vpp=$appID&amp;udid=$udid&amp;serial=$serial"</string>
+#########################################################
+# Replace YOUR_WEBAPP_URL with your own SheetsMDM url
+#########################################################
+curl -s -L "YOUR_WEBAPP_URL?action=InstallApplication&amp;vpp=$appID&amp;udid=$udid&amp;serial=$serial"</string>
 	<key>preinstall_alert</key>
 	<dict>
 		<key>alert_detail</key>

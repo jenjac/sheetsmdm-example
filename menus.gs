@@ -15,7 +15,6 @@ function createMenu() {
   .addSubMenu(
     ui.createMenu('Run Command')
     .addItem('Invoke Munki Install', 'invokeMunkiInstall')
-    .addItem('Run Terminal Command', 'runTerminalCommand')
     .addItem('Available OS Updates', 'availableOSUpdates')
     .addItem('Certificate List', 'certificateList')
     .addItem('Device Information', 'deviceInformation')

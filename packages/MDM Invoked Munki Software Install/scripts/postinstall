@@ -27,7 +27,11 @@ fi
 while read -r package; do
 
     package=$(echo $package | sed 's/\\n//')
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 6a5af6556887f1470733559330343adfa12b5319
     # Check it's not already in there
     alreadyExists=$("$plistBuddy" -c "Print: managed_installs" "$manifestLocation" | /usr/bin/grep "$package")
 
