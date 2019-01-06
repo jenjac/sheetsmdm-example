@@ -6,7 +6,7 @@ udid=$(ioreg -d2 -c IOPlatformExpertDevice | awk -F\" '/IOPlatformUUID/{print $(
 ##################################################################
 # Enter your own Web App URL in place of "YOUR_WEBAPP_URL" below
 ##################################################################
-pkgs=$(curl -s -L "YOUR_WEBAPP_URL?action=GetMDMInvoked&udid=$udid")
+pkgs=$(curl -s -L "https://script.google.com/macros/s/AKfycbxtS2Eevv-paVxfEDUL44p4WUf7jTcNUXebNOzj9ilLsagISJy4/exec?action=GetMDMInvoked&udid=$udid")
 
 # Don't run anything if nothing is requested
 if [ "$pkgs" == "nothing requested" ]; then
@@ -25,6 +25,9 @@ if [ ! -f "$manifestLocation" ]; then
 fi
 
 while read -r package; do
+
+    package=$(echo $package | sed 's/\\n//')
+
     # Check it's not already in there
     alreadyExists=$("$plistBuddy" -c "Print: managed_installs" "$manifestLocation" | /usr/bin/grep "$package")
 
