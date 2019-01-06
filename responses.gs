@@ -124,8 +124,6 @@ function doGet(e) {
           var request = processInstallApplicationRequest(parameters);
         } else if ( action[i] == "GetMDMInvoked" ) {
           var request = processGetMDMInvokedRequest(parameters);
-        } else if ( action[i] == "RunTerminalCommand" ) {
-          var request = processRunTerminalCommandRequest(parameters);
         }
       }
     }
