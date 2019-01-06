@@ -25,6 +25,9 @@ if [ ! -f "$manifestLocation" ]; then
 fi
 
 while read -r package; do
+
+    package=$(echo $package | sed 's/\\n//')
+    
     # Check it's not already in there
     alreadyExists=$("$plistBuddy" -c "Print: managed_installs" "$manifestLocation" | /usr/bin/grep "$package")
 
