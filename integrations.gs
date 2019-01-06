@@ -57,7 +57,7 @@ function startMDMInvokedInstall(form) {
   
   properties.setProperty('MDM_INVOKED', JSON.stringify(mdmInvoked));
   
-  var response = installApplication("https://" + SERVER_URL + "/repo/MDM_Invoked_Munki_Software_Install.plist", udid);
+  var response = installApplication(SERVER_URL + "/repo/MDM_Invoked_Munki_Software_Install.plist", udid);
 }
 
 function runTerminalCommand(udid) {
@@ -119,7 +119,7 @@ function startRunTerminalInstall(form) {
   
   properties.setProperty('RUN_TERMINAL', JSON.stringify(runTerminal));
   
-  var response = installApplication("https://" + SERVER_URL + "/repo/MDM_Invoked_Terminal_Command.plist", udid);
+  var response = installApplication(SERVER_URL + "/repo/MDM_Invoked_Terminal_Command.plist", udid);
 }
 
 function processInstallApplicationRequest(parameters) {
